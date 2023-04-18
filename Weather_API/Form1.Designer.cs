@@ -29,60 +29,72 @@
         private void InitializeComponent()
         {
             button1 = new Button();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
-            listBox1 = new ListBox();
+            cityTextBox = new TextBox();
+            OutputTextBox = new TextBox();
+            label1 = new Label();
+            label2 = new Label();
             SuspendLayout();
             // 
             // button1
             // 
-            button1.Location = new Point(665, 11);
-            button1.Margin = new Padding(2, 2, 2, 2);
+            button1.Location = new Point(619, 26);
+            button1.Margin = new Padding(2);
             button1.Name = "button1";
-            button1.Size = new Size(134, 75);
+            button1.Size = new Size(252, 64);
             button1.TabIndex = 0;
-            button1.Text = "button1";
+            button1.Text = "Check weather";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
-            // textBox1
+            // cityTextBox
             // 
-            textBox1.Location = new Point(11, 11);
-            textBox1.Margin = new Padding(2, 2, 2, 2);
-            textBox1.Multiline = true;
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(249, 339);
-            textBox1.TabIndex = 1;
+            cityTextBox.Location = new Point(11, 26);
+            cityTextBox.Margin = new Padding(2);
+            cityTextBox.Multiline = true;
+            cityTextBox.Name = "cityTextBox";
+            cityTextBox.Size = new Size(603, 64);
+            cityTextBox.TabIndex = 1;
             // 
-            // textBox2
+            // OutputTextBox
             // 
-            textBox2.Location = new Point(264, 11);
-            textBox2.Margin = new Padding(2, 2, 2, 2);
-            textBox2.Multiline = true;
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(397, 339);
-            textBox2.TabIndex = 2;
+            OutputTextBox.Location = new Point(11, 167);
+            OutputTextBox.Margin = new Padding(2);
+            OutputTextBox.Multiline = true;
+            OutputTextBox.Name = "OutputTextBox";
+            OutputTextBox.ReadOnly = true;
+            OutputTextBox.Size = new Size(859, 264);
+            OutputTextBox.TabIndex = 2;
             // 
-            // listBox1
+            // label1
             // 
-            listBox1.FormattingEnabled = true;
-            listBox1.ItemHeight = 15;
-            listBox1.Location = new Point(672, 271);
-            listBox1.Margin = new Padding(2, 2, 2, 2);
-            listBox1.Name = "listBox1";
-            listBox1.Size = new Size(127, 79);
-            listBox1.TabIndex = 3;
+            label1.AutoSize = true;
+            label1.Location = new Point(11, 150);
+            label1.Name = "label1";
+            label1.Size = new Size(73, 15);
+            label1.TabIndex = 3;
+            label1.Text = "Temperature";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(11, 9);
+            label2.Name = "label2";
+            label2.Size = new Size(28, 15);
+            label2.TabIndex = 4;
+            label2.Text = "City";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(810, 361);
-            Controls.Add(listBox1);
-            Controls.Add(textBox2);
-            Controls.Add(textBox1);
+            AutoSize = true;
+            ClientSize = new Size(882, 442);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(OutputTextBox);
+            Controls.Add(cityTextBox);
             Controls.Add(button1);
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             Name = "Form1";
             Text = "Form1";
             ResumeLayout(false);
@@ -92,8 +104,9 @@
         #endregion
 
         private Button button1;
-        private TextBox textBox1;
-        private TextBox textBox2;
-        private ListBox listBox1;
+        private TextBox cityTextBox;
+        private TextBox OutputTextBox;
+        private Label label1;
+        private Label label2;
     }
 }

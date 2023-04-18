@@ -17,7 +17,10 @@ namespace Weather_API
             //string json = await weatherInterface.downloadData();
             //textBox1.Text = json;
             //var weather = jsonserializer.deserialize<weatherinterface>(json);
-            listBox1.Items.Clear();
+
+            string city = cityTextBox.Text;
+
+            await weatherInterface.makeWeatherForecast(cityTextBox, OutputTextBox);
         }
 
     }

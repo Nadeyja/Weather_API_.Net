@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using System.Text.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Weather_API
 {
@@ -12,36 +7,62 @@ namespace Weather_API
     {
         private readonly string _apiKey = "489b28773a9262397afee68bebaf4abb";
 
-        private int _maxTemperature;
-        private int _minTemperature;
-        private int _lon;
-        private int _lat;
-
+        private double _temperature;
+        private double _lon;
+        private double _lat;
 
         private Uri generateRequestUrl(string queryString)
         {
             string scheme = "http";
 
-            return new Uri($"{scheme}://api.openweathermap.org/data/2.5/weather?appid={_apiKey}&q={queryString}");
+            return new Uri($"{scheme}://api.openweathermap.org/data/2.5/forecast?appid={_apiKey}&q={queryString}");
         }
 
-        private async Task<string> makeApiQuery()
+        private async Task<string> makeApiQuery(Uri urlQuery)
         {
             HttpClient client = new HttpClient();
-            string call = "https://api.openweathermap.org/data/2.5/weather?city=wroclaw&appid=489b28773a9262397afee68bebaf4abb&units=metric";
-            string json = await client.GetStringAsync(call);
+            string json = await client.GetStringAsync(urlQuery);
 
             return json;
         }
 
-        public void displayData(string apiResponse)
+        private void unravelJsonToObject(string apiResponse)
         {
             if (apiResponse == null)
             {
                 throw new ArgumentNullException();
             } else {
-                dynamic jsonObject = JsonNode.Parse(apiResponse);
-                this._maxTemperature = jsonObject.temp_min; 
+                var jsonObject = JsonDocument.Parse(apiResponse);
+                JObject o = JObject.Parse(apiResponse);
+
+                this._temperature = (double)o.SelectToken("$.list[0].main.temp")!;
+                this._temperature = this.evalKelvinToCelsius(this._temperature);
+
+                this._lon = (double)o.SelectToken("$.city.coord.lon")!;
+                this._lat = (double)o.SelectToken("$.city.coord.lat")!;    
+            }
+        }
+
+        private double evalKelvinToCelsius(double tempKelvin)
+        {
+            double tempCelsius = Math.Round(tempKelvin - 273.15, 2);
+            return tempCelsius;
+        }
+
+        public async Task makeWeatherForecast(TextBox cityTextBox, TextBox outputTextBox)
+        {
+            string city = cityTextBox.Text;
+
+            Uri urlRequestUrl = this.generateRequestUrl(city);
+            string jsonResponse = await this.makeApiQuery(urlRequestUrl);
+
+            if (jsonResponse == null)
+            {
+                throw new ArgumentNullException("Bad call");
+            } else {
+                this.unravelJsonToObject(jsonResponse);
+
+                outputTextBox.Text = this._temperature.ToString() + " °C";
             }
         }
     }
