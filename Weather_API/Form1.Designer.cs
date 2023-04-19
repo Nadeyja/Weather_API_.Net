@@ -33,6 +33,9 @@
             OutputTextBox = new TextBox();
             label1 = new Label();
             label2 = new Label();
+            HourTextbox = new TextBox();
+            label3 = new Label();
+            ClearButton = new Button();
             SuspendLayout();
             // 
             // button1
@@ -83,12 +86,41 @@
             label2.TabIndex = 4;
             label2.Text = "City";
             // 
+            // HourTextbox
+            // 
+            HourTextbox.Location = new Point(12, 124);
+            HourTextbox.Name = "HourTextbox";
+            HourTextbox.Size = new Size(111, 23);
+            HourTextbox.TabIndex = 5;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(11, 106);
+            label3.Name = "label3";
+            label3.Size = new Size(83, 15);
+            label3.TabIndex = 6;
+            label3.Text = "Hours forward";
+            // 
+            // ClearButton
+            // 
+            ClearButton.Location = new Point(181, 123);
+            ClearButton.Name = "ClearButton";
+            ClearButton.Size = new Size(75, 23);
+            ClearButton.TabIndex = 7;
+            ClearButton.Text = "Clear";
+            ClearButton.UseVisualStyleBackColor = true;
+            ClearButton.Click += ClearButton_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             ClientSize = new Size(882, 442);
+            Controls.Add(ClearButton);
+            Controls.Add(label3);
+            Controls.Add(HourTextbox);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(OutputTextBox);
@@ -108,5 +140,8 @@
         private TextBox OutputTextBox;
         private Label label1;
         private Label label2;
+        private TextBox HourTextbox;
+        private Label label3;
+        private Button ClearButton;
     }
 }

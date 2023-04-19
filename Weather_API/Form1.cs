@@ -16,31 +16,41 @@ namespace Weather_API
         {
             WeatherInterface weatherInterface = new WeatherInterface();
 
-            //string json = await weatherInterface.downloadData();
-            //textBox1.Text = json;
-            //var weather = jsonserializer.deserialize<weatherinterface>(json);
+            var context = new ForecastSet();
+            //context.Forecasts.Add(new Forecast { Temp = 16, Date = DateTime.Now });
+            //context.SaveChanges();
 
-            string city = cityTextBox.Text;
+            uint hoursForward = uint.Parse(HourTextbox.Text);
+            hoursForward = hoursForward - hoursForward % 3;
+            HourTextbox.Text = hoursForward.ToString();
 
-            //My DB connection string source, not gonna work on the university computer
-            //string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\pasma\Source\Repos\Weather_API_.Net\Weather_API\WeatherDB.mdf;Integrated Security=True";
-            SqlConnection conn = new SqlConnection(connectionString);
+            var forecastQueried = (from s in context.Forecasts
+                                   where s.HoursForward == hoursForward
+                                   select s).ToList<Forecast>();
 
-
-            conn.Open();
-            if(conn.State == ConnectionState.Open)
+            if (forecastQueried.Count == 0)
             {
-                OutputTextBox.Text = "Connected";
-            } 
+                double temp = await weatherInterface.makeWeatherForecast(cityTextBox, OutputTextBox, hoursForward);
+                context.Forecasts.Add(new Forecast { Temp = temp, HoursForward = hoursForward });
+            }
             else
             {
-                OutputTextBox.Text = "Database error";
+                OutputTextBox.Text = "ID: " + forecastQueried[0].ID + " , Temperature:" + forecastQueried[0].Temp + " °C, Date: " + forecastQueried[0].HoursForward.ToString() + "\n";
             }
-
-            //Main call of making a forecast only using an API without saving to DB
-            //
-            //await weatherInterface.makeWeatherForecast(cityTextBox, OutputTextBox);
         }
 
+        private void ClearButton_Click(object sender, EventArgs e)
+        {
+            var context = new ForecastSet();
+
+            var queryAll = context.Forecasts
+                .SqlQuery("select * from Forecasts").ToList<Forecast>();
+
+            foreach(var forecast in queryAll)
+                context.Forecasts.Remove(forecast);
+
+            context.SaveChanges();
+            OutputTextBox.Text = "";
+        }
     }
 }

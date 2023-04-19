@@ -26,7 +26,7 @@ namespace Weather_API
             return json;
         }
 
-        private void unravelJsonToObject(string apiResponse)
+        private void unravelJsonToObject(string apiResponse, uint hoursForward)
         {
             if (apiResponse == null)
             {
@@ -35,7 +35,8 @@ namespace Weather_API
                 var jsonObject = JsonDocument.Parse(apiResponse);
                 JObject o = JObject.Parse(apiResponse);
 
-                this._temperature = (double)o.SelectToken("$.list[0].main.temp")!;
+                string tokenSelection = "$.list["+ hoursForward +"].main.temp";
+                this._temperature = (double)o.SelectToken(tokenSelection)!;
                 this._temperature = this.evalKelvinToCelsius(this._temperature);
 
                 this._lon = (double)o.SelectToken("$.city.coord.lon")!;
@@ -49,7 +50,7 @@ namespace Weather_API
             return tempCelsius;
         }
 
-        public async Task makeWeatherForecast(TextBox cityTextBox, TextBox outputTextBox)
+        public async Task<double> makeWeatherForecast(TextBox cityTextBox, TextBox outputTextBox, uint hoursForward)
         {
             string city = cityTextBox.Text;
 
@@ -60,9 +61,10 @@ namespace Weather_API
             {
                 throw new ArgumentNullException("Bad call");
             } else {
-                this.unravelJsonToObject(jsonResponse);
+                this.unravelJsonToObject(jsonResponse, hoursForward);
 
                 outputTextBox.Text = this._temperature.ToString() + " °C";
+                return this._temperature;
             }
         }
     }
